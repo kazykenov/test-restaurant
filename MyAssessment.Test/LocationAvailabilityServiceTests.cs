@@ -10,7 +10,7 @@ public class LocationAvailabilityServiceTests
     [SetUp]
     public void Setup()
     {
-        // service = 
+        
     }
 
     [Test]
