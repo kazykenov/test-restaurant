@@ -4,7 +4,7 @@ namespace MyAssessment.Services;
 
 public interface ITableService
 {
-    Table GetTableForPeople(Location location, int numberOfPeople);
+    Task<Table> GetTableForPeople(Location location, int numberOfPeople);
 }
 
 public class TableService : ITableService
@@ -16,9 +16,9 @@ public class TableService : ITableService
         _tableRepository = tableRepository;
     }
     
-    public Table GetTableForPeople(Location location, int numberOfPeople)
+    public async Task<Table> GetTableForPeople(Location location, int numberOfPeople)
     {
-        var tables = _tableRepository.GetTablesByLocation(location);
+        var tables = await _tableRepository.GetTablesByLocation(location);
 
         foreach (var table in tables)
         {

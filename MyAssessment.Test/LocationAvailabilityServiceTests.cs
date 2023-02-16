@@ -14,7 +14,7 @@ public class LocationAvailabilityServiceTests
     }
 
     [Test]
-    public void IsDatetimeAvailable_WhenDatetimeBetweenOpenCloseHours_ReturnsTrue()
+    public async Task IsDatetimeAvailable_WhenDatetimeBetweenOpenCloseHours_ReturnsTrue()
     {
         var location = new Location
         {
@@ -22,11 +22,11 @@ public class LocationAvailabilityServiceTests
             ClosingHour = 20
         };
 
-        Assert.IsTrue(_service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 13, 0, 0)));
+        Assert.IsTrue(await _service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 13, 0, 0)));
     }
 
     [Test]
-    public void IsDatetimeAvailable_WhenDatetimeNotBetweenOpenCloseHours_ReturnsFalse()
+    public async Task IsDatetimeAvailable_WhenDatetimeNotBetweenOpenCloseHours_ReturnsFalse()
     {
         var location = new Location
         {
@@ -34,11 +34,11 @@ public class LocationAvailabilityServiceTests
             ClosingHour = 20
         };
 
-        Assert.IsFalse(_service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 9, 0, 0)));
+        Assert.IsFalse(await _service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 9, 0, 0)));
     }
 
     [Test]
-    public void IsDatetimeAvailable_WhenCloseHourLessThanOpenHourAndDatetimeBetweenOpenCloseHours_ReturnsTrue()
+    public async Task IsDatetimeAvailable_WhenCloseHourLessThanOpenHourAndDatetimeBetweenOpenCloseHours_ReturnsTrue()
     {
         var location = new Location
         {
@@ -46,11 +46,11 @@ public class LocationAvailabilityServiceTests
             ClosingHour = 10
         };
 
-        Assert.IsTrue(_service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 5, 0, 0)));
+        Assert.IsTrue(await _service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 5, 0, 0)));
     }
 
     [Test]
-    public void IsDatetimeAvailable_WhenCloseHourLessThanOpenHourAndDatetimeNotBetweenOpenCloseHours_ReturnsFalse()
+    public async Task IsDatetimeAvailable_WhenCloseHourLessThanOpenHourAndDatetimeNotBetweenOpenCloseHours_ReturnsFalse()
     {
         var location = new Location
         {
@@ -58,19 +58,19 @@ public class LocationAvailabilityServiceTests
             ClosingHour = 10
         };
 
-        Assert.IsFalse(_service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 15, 0, 0)));
+        Assert.IsFalse(await _service.IsDatetimeAvailable(location, new DateTime(2022, 02, 02, 15, 0, 0)));
     }
 
     [Test]
-    public void IsDatetimeAvailable_WhenAlwaysAvailable_ReturnsTrue()
+    public async Task IsDatetimeAvailable_WhenAlwaysAvailable_ReturnsTrue()
     {
-        Assert.IsTrue(_service.IsDatetimeAvailable(new Location
+        Assert.IsTrue(await _service.IsDatetimeAvailable(new Location
         {
             OpeningHour = 0,
             ClosingHour = 0
         }, new DateTime(2022, 02, 02, 15, 0, 0)));
 
-        Assert.IsTrue(_service.IsDatetimeAvailable(new Location
+        Assert.IsTrue(await _service.IsDatetimeAvailable(new Location
         {
             OpeningHour = 12,
             ClosingHour = 12

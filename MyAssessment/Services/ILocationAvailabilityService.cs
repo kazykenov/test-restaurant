@@ -5,23 +5,25 @@ namespace MyAssessment.Services;
 // Abstract from where to fetch open-close hours
 public interface ILocationAvailabilityService
 {
-    bool IsDatetimeAvailable(Location location, DateTime dateTime);
+    Task<bool> IsDatetimeAvailable(Location location, DateTime dateTime);
 }
 
 // in our implementation it will be inside our "locations" table.
 public class LocationAvailabilityService : ILocationAvailabilityService
 {
-    public bool IsDatetimeAvailable(Location location, DateTime dateTime)
+    public Task<bool> IsDatetimeAvailable(Location location, DateTime dateTime)
     {
         var isClosingNextDay = location.ClosingHour <= location.OpeningHour;
         var hour = dateTime.Hour;
 
         if (!isClosingNextDay)
         {
-            return location.OpeningHour <= hour && hour <= location.ClosingHour;
+            return Task.FromResult(location.OpeningHour <= hour && hour <= location.ClosingHour);
         }
 
-        return (location.OpeningHour <= hour && hour <= 23) || (0 <= hour && hour <= location.ClosingHour);
+        return Task.FromResult(
+            (location.OpeningHour <= hour && hour <= 23) ||
+            (0 <= hour && hour <= location.ClosingHour));
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using MyAssessment.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MyAssessment.Data;
 using MyAssessment.Model;
 
 namespace MyAssessment.Services;
@@ -7,9 +8,9 @@ public interface IReservationRepository
 {
     IEnumerable<Table> GetReservationsByTableAndDateTime(Table table, DateTime dateTime);
 
-    int GetReservationsCountByTableAndDateTime(Table table, DateTime dateTime);
+    Task<int> GetReservationsCountByTableAndDateTime(Table table, DateTime dateTime);
 
-    Reservation CreateReservation(Table table, DateTime dateTime, int numberOfPeople);
+    Task<Reservation> CreateReservation(Table table, DateTime dateTime, int numberOfPeople);
 }
 
 public class ReservationRepository : IReservationRepository
@@ -28,14 +29,14 @@ public class ReservationRepository : IReservationRepository
         throw new NotImplementedException();
     }
 
-    public int GetReservationsCountByTableAndDateTime(Table table, DateTime dateTime)
+    public async Task<int> GetReservationsCountByTableAndDateTime(Table table, DateTime dateTime)
     {
         var timestamp = _timestampService.ConvertToTimestamp(dateTime);
-        return _context.Reservation.Count(reservation =>
+        return await _context.Reservation.CountAsync(reservation =>
             reservation.TableId == table.TableId && reservation.Timestamp == timestamp);
     }
 
-    public Reservation CreateReservation(Table table, DateTime dateTime, int numberOfPeople)
+    public async Task<Reservation> CreateReservation(Table table, DateTime dateTime, int numberOfPeople)
     {
         var timestamp = _timestampService.ConvertToTimestamp(dateTime);
         var reservation = new Reservation()
@@ -44,10 +45,9 @@ public class ReservationRepository : IReservationRepository
             Timestamp = timestamp,
             NumberOfPeople = numberOfPeople,
         };
-
-        // todo: refactor to async
-        _context.Reservation.Add(reservation); 
-        _context.SaveChanges();
+        
+        await _context.Reservation.AddAsync(reservation); 
+        await _context.SaveChangesAsync();
 
         return reservation;
     }

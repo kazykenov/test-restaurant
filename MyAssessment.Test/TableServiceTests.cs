@@ -16,7 +16,7 @@ public class TableServiceTests
     }
 
     [Test]
-    public void GetTableForPeople_WhenNumberOfPeopleFitInTables_ReturnsAppropriateTables()
+    public async Task GetTableForPeople_WhenNumberOfPeopleFitInTables_ReturnsAppropriateTables()
     {
         var location = new Location();
         var smallTable = new Table() { AllowNumFrom = 1, AllowNumTo = 2 };
@@ -30,13 +30,13 @@ public class TableServiceTests
             largeTable
         });
 
-        var table = _service.GetTableForPeople(location, 2);
+        var table = await _service.GetTableForPeople(location, 2);
         Assert.That(smallTable, Is.EqualTo(table));
         
-        table = _service.GetTableForPeople(location, 3);
+        table = await _service.GetTableForPeople(location, 3);
         Assert.That(mediumTable, Is.EqualTo(table));
         
-        table = _service.GetTableForPeople(location, 8);
+        table = await _service.GetTableForPeople(location, 8);
         Assert.That(largeTable, Is.EqualTo(table));
     }
     
@@ -55,9 +55,9 @@ public class TableServiceTests
             largeTable
         });
 
-        Assert.Catch<Exception>(() =>
+        Assert.ThrowsAsync<Exception>( async () =>
         {
-            _service.GetTableForPeople(location, 9);
+            await _service.GetTableForPeople(location, 9);
         });
     }
     
@@ -68,14 +68,14 @@ public class TableServiceTests
 
         _repository.GetTablesByLocation(location).Returns(Array.Empty<Table>());
 
-        Assert.Catch<Exception>(() =>
+        Assert.ThrowsAsync<Exception>(async () =>
         {
-            _service.GetTableForPeople(location, 9);
+            await _service.GetTableForPeople(location, 9);
         });
     }
     
     [Test]
-    public void GetTableForPeople_WhenFitToMultipleTables_ReturnsFirstTableInTheList()
+    public async Task GetTableForPeople_WhenFitToMultipleTables_ReturnsFirstTableInTheList()
     {
         var location = new Location();
         var table1 = new Table() { AllowNumFrom = 1, AllowNumTo = 5};
@@ -83,7 +83,7 @@ public class TableServiceTests
 
         _repository.GetTablesByLocation(location).Returns(new[] { table1, table2 });
         
-        var table = _service.GetTableForPeople(location, 3);
+        var table = await _service.GetTableForPeople(location, 3);
         
         Assert.AreEqual(table, table1);
     }

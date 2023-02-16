@@ -1,32 +1,37 @@
-﻿using MyAssessment.Model;
+﻿using MyAssessment.Data;
+using MyAssessment.Model;
 
 namespace MyAssessment.Services;
 
 public interface IReservationService
 {
-    Reservation Reserve(Table table, DateTime dateTime, int numberOfPeople);
+    Task<Reservation> Reserve(Table table, DateTime dateTime, int numberOfPeople);
 }
 
 public class ReservationService : IReservationService
 {
     private readonly IReservationRepository _reservationRepository;
+    private readonly ApplicationDbContext _context;
 
-    public ReservationService(IReservationRepository reservationRepository)
+    public ReservationService(IReservationRepository reservationRepository, ApplicationDbContext context)
     {
         _reservationRepository = reservationRepository;
+        _context = context; // todo: need to move to repository somehow
     }
     
-    public Reservation Reserve(Table table, DateTime dateTime, int numberOfPeople)
+    public async Task<Reservation> Reserve(Table table, DateTime dateTime, int numberOfPeople)
     {
-        var reservedTablesQuantity = _reservationRepository.GetReservationsCountByTableAndDateTime(table, dateTime);
-
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+        
+        var reservedTablesQuantity = await _reservationRepository.GetReservationsCountByTableAndDateTime(table, dateTime);
         if (reservedTablesQuantity >= table.Quantity)
         {
-            throw new Exception("All the tables are reserved");
+            throw new InvalidDataException("All the tables are reserved");
         }
 
-        var reservation = _reservationRepository.CreateReservation(table, dateTime, numberOfPeople);
-
+        var reservation = await _reservationRepository.CreateReservation(table, dateTime, numberOfPeople);
+        await transaction.CommitAsync();
+            
         return reservation;
     }
 }

@@ -5,7 +5,7 @@ namespace MyAssessment.Services;
 
 public interface IRestaurantRepository
 {
-    Restaurant GetRestaurantById(int restaurantId);
+    Task<Restaurant> GetRestaurantById(int restaurantId);
 }
 
 public class RestaurantRepository : IRestaurantRepository
@@ -17,9 +17,9 @@ public class RestaurantRepository : IRestaurantRepository
         _context = context;
     }
     
-    public Restaurant GetRestaurantById(int restaurantId)
+    public async Task<Restaurant> GetRestaurantById(int restaurantId)
     {
         // todo: make async
-        return _context.Restaurants.Find(restaurantId) ?? throw new InvalidOperationException();
+        return await _context.Restaurants.FindAsync(restaurantId) ?? throw new InvalidOperationException();
     }
 } 

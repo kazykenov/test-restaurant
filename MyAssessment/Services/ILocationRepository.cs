@@ -5,7 +5,7 @@ namespace MyAssessment.Services;
 
 public interface ILocationRepository
 {
-    Location GetLocationById(int locationId);
+    Task<Location> GetLocationById(int locationId);
 }
 
 public class LocationRepository : ILocationRepository
@@ -17,9 +17,8 @@ public class LocationRepository : ILocationRepository
         _context = context;
     }
     
-    public Location GetLocationById(int locationId)
+    public async Task<Location> GetLocationById(int locationId)
     {
-        // todo: make async
-        return _context.Locations.Find(locationId) ?? throw new InvalidOperationException();
+        return await _context.Locations.FindAsync(locationId) ?? throw new InvalidOperationException();
     }
 }

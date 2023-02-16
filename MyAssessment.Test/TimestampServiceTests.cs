@@ -19,7 +19,7 @@ public class TimestampServiceTests
 
         var timestamp = _service.ConvertToTimestamp(dateTime);
         
-        Assert.AreEqual(1677844800, timestamp);
+        Assert.That(timestamp, Is.EqualTo(1677844800));
     }
     
     [Test]
@@ -29,6 +29,6 @@ public class TimestampServiceTests
 
         var timestamp = _service.ConvertToTimestamp(dateTime);
         
-        Assert.AreEqual(978314400, timestamp);
+        Assert.That(timestamp, Is.EqualTo(978314400));
     }
 }

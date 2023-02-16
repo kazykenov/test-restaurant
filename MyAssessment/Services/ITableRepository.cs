@@ -1,11 +1,12 @@
-﻿using MyAssessment.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MyAssessment.Data;
 using MyAssessment.Model;
 
 namespace MyAssessment.Services;
 
 public interface ITableRepository
 {
-    IEnumerable<Table> GetTablesByLocation(Location location);
+    Task<IEnumerable<Table>> GetTablesByLocation(Location location);
 }
 
 public class TableRepository : ITableRepository
@@ -17,8 +18,8 @@ public class TableRepository : ITableRepository
         _context = context;
     }
     
-    public IEnumerable<Table> GetTablesByLocation(Location location)
+    public async Task<IEnumerable<Table>> GetTablesByLocation(Location location)
     {
-        return _context.Tables.Where(table => table.LocationId == location.LocationId).ToList();
+        return await _context.Tables.Where(table => table.LocationId == location.LocationId).ToListAsync();
     }
 }
