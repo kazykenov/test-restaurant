@@ -14,10 +14,14 @@ public class LocationAvailabilityService : ILocationAvailabilityService
     public bool IsDatetimeAvailable(Location location, DateTime dateTime)
     {
         var isClosingNextDay = location.ClosingHour <= location.OpeningHour;
-        var openingDate = dateTime.Date;
-        var closingDate = dateTime.Date.AddHours(location.ClosingHour).AddDays(isClosingNextDay ? 1 : 0);
-        
-        return dateTime >= openingDate && dateTime <= closingDate;
+        var hour = dateTime.Hour;
+
+        if (!isClosingNextDay)
+        {
+            return location.OpeningHour <= hour && hour <= location.ClosingHour;
+        }
+
+        return (location.OpeningHour <= hour && hour <= 23) || (0 <= hour && hour <= location.ClosingHour);
     }
 }
 

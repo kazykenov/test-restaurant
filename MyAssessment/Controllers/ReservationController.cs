@@ -54,21 +54,21 @@ namespace MyAssessment.Controllers
             var restaurant = _restaurantRepository.GetRestaurantById(restaurantId);
             var location = _locationRepository.GetLocationById(locationId);
 
-            if (_locationAvailabilityService.IsDatetimeAvailable(location, form.DateTime))
-            {
-                throw new Exception("invalid datetime");
-            }
+            // if (_locationAvailabilityService.IsDatetimeAvailable(location, form.DateTime))
+            // {
+            //     throw new Exception("invalid datetime");
+            // }
 
             if (restaurant == null)
             {
                 throw new Exception("Not found");
             }
 
-            return Enumerable.Range(1, 5).Select(index => new Table
-            {
-                TableId = restaurantId,
-            })
-            .ToArray();
+            // return Enumerable.Range(1, 5).Select(index => new Table
+            // {
+            //     TableId = restaurantId,
+            // })
+            // .ToArray();
         }
     }
 }
