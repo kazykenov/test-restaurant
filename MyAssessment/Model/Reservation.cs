@@ -13,8 +13,8 @@ namespace MyAssessment.Model
         public Table Table { get; set; }
 
         [Required]
-        public string Date { get; set; }
-        [Required]
-        public int Hour { get; set; }
+        public long Timestamp { get; set; }
+        
+        public int NumberOfPeople { get; set; }
     }
 }

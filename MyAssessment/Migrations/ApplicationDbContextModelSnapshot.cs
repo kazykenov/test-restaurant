@@ -61,15 +61,14 @@ namespace MyAssessment.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
-                    b.Property<string>("Date")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Hour")
+                    b.Property<int>("NumberOfPeople")
                         .HasColumnType("int");
 
                     b.Property<int>("TableId")
                         .HasColumnType("int");
+
+                    b.Property<long>("Timestamp")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ReservationId");
 
@@ -114,6 +113,9 @@ namespace MyAssessment.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("TableId");

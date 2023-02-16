@@ -17,6 +17,9 @@ namespace MyAssessment.Model
 
         [Required]
         public int AllowNumTo { get; set; }
+        
+        [Required]
+        public int Quantity { get; set; }
 
         public ICollection<Reservation> reservations { get; set; }
     }

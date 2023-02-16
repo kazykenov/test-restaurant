@@ -53,7 +53,7 @@ namespace MyAssessment.Controllers
         }
 
         [HttpPost("restaurants/{restaurantId}/locations/{locationId}/reserve")]
-        public async Task<Reservation> Reserve([FromBody] ReservationForm form, int restaurantId, int locationId)
+        public async Task Reserve([FromBody] ReservationForm form, int restaurantId, int locationId)
         {
             // var restaurant = await _context.Restaurants.FindAsync(restaurantId);
             // var location = await _context.Locations.FindAsync(locationId);
@@ -71,7 +71,7 @@ namespace MyAssessment.Controllers
             var table = _tableService.GetTableForPeople(location, form.NumberOfPeople);
             var reservation = _reservationService.Reserve(table, datetime, form.NumberOfPeople);
 
-            return reservation;
+            return;
         }
     }
 }
